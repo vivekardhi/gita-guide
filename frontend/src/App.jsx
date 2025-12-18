@@ -21,7 +21,10 @@ function App() {
     );
 
     const data = await res.json();
-    setResponse(data);
+console.log("API RESPONSE:", data);
+window.__lastResponse = data;
+setResponse(data);
+
     setLoading(false);
   }
 
