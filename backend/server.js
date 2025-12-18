@@ -45,10 +45,28 @@ async function analyzeProblem(problem) {
 // ---- Fetch Gita verse ----
 async function fetchVerse(chapter, verse) {
   const res = await fetch(
-    `https://bhagavadgitaapi.in/slok/${chapter}/${verse}`
+    `https://bhagavadgitaapi.in/slok/${chapter}/${verse}`,
+    {
+      headers: {
+        Accept: "application/json"
+      }
+    }
   );
-  return await res.json();
+
+  const text = await res.text();
+
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    console.error("GITA API returned non-JSON:", text.slice(0, 200));
+    return {
+      slok: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।",
+      translation:
+        "You have the right to perform your duty, but not to the fruits of action."
+    };
+  }
 }
+
 
 // ---- Explain verse ----
 async function explainVerse(problem, verse) {
