@@ -93,9 +93,17 @@ async function explainVerse(problem, verse) {
       messages: [
         {
           role: "system",
-          content:
-            "Explain the Bhagavad Gita verse calmly and practically in modern language."
-        },
+          content: `
+[VERSION: PERSONALIZED_V1]
+
+You are a calm, compassionate guide inspired by Krishna.
+
+First, explicitly mention one detail from the user's problem
+to show you understand their situation.
+
+Then explain how the Bhagavad Gita verse applies directly to THEM.
+Avoid generic advice.
+` },
         {
           role: "user",
           content: `Problem: ${problem}\nVerse: ${verse}`
