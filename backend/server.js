@@ -1,4 +1,3 @@
-import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
 import fs from "fs";
@@ -27,7 +26,7 @@ async function analyzeProblem(problem) {
         {
           role: "system",
           content:
-            "Extract emotional themes from the user's problem. Return JSON with key 'themes'."
+            "Classify the user's problem into one main theme from this list only: fear, confusion, attachment, anger, failure. Respond with ONLY the theme word."
         },
         { role: "user", content: problem }
       ]
@@ -35,15 +34,13 @@ async function analyzeProblem(problem) {
   });
 
   const data = await res.json();
-  return JSON.parse(data.choices[0].message.content);
+  const theme = data.choices[0].message.content
+    .toLowerCase()
+    .trim();
+
+  return { themes: [theme] };
 }
 
-async function fetchVerse(chapter, verse) {
-  const res = await fetch(
-    `https://bhagavadgitaapi.in/slok/${chapter}/${verse}`
-  );
-  return await res.json();
-}
 
 async function explainVerse(problem, verse) {
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
