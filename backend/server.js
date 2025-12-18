@@ -88,11 +88,30 @@ app.post("/ask", async (req, res) => {
       verseData.slok
     );
 
-    res.json({
-      verse: verseData.slok,
-      meaning: verseData.tej.ht,
-      explanation
-    });
+const verseText =
+  verseData.slok ||
+  verseData.shloka ||
+  "Verse not available";
+
+const meaningText =
+  verseData.translation ||
+  verseData.te?.ht ||
+  verseData.tej?.ht ||
+  "Meaning not available";
+
+const explanationText =
+  explanation && explanation.trim().length > 0
+    ? explanation
+    : "Krishna advises calm action without attachment to outcomes.";
+console.log("GITA API RESPONSE:", verseData);
+console.log("EXPLANATION:", explanation);
+
+res.json({
+  verse: verseText,
+  meaning: meaningText,
+  explanation: explanationText
+});
+
   } catch (e) {
     res.status(500).json({ error: "Something went wrong" });
   }
