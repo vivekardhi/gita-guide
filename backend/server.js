@@ -136,10 +136,13 @@ app.post("/ask", async (req, res) => {
       verseRef.verse
     );
 
-    const explanation = await explainVerse(
-      problem,
-      verseData.slok
-    );
+    let explanation;
+try {
+  explanation = await explainVerse(problem, verseData.slok);
+} catch (e) {
+  explanation = `DEBUG_FALLBACK_USED: ${e.message}`;
+}
+
 
     const verseText =
       verseData.slok || "Verse not available";
