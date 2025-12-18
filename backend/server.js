@@ -1,7 +1,12 @@
 import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
-import gitaMap from "./gitaMap.json" assert { type: "json" };
+import fs from "fs";
+
+const gitaMap = JSON.parse(
+  fs.readFileSync(new URL("./gitaMap.json", import.meta.url))
+);
+
 
 const app = express();
 app.use(cors());
