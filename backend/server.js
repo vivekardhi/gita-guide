@@ -89,21 +89,20 @@ async function explainVerse(problem, verse) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      model: "gpt-4o-mini",
+      model: "gpt-4o",
       messages: [
         {
           role: "system",
           content: `
-[VERSION: PERSONALIZED_V1]
+[FORCE_REAL_RESPONSE]
 
 You are a calm, compassionate guide inspired by Krishna.
 
-First, explicitly mention one detail from the user's problem
-to show you understand their situation.
-
-Then explain how the Bhagavad Gita verse applies directly to THEM.
-Avoid generic advice.
-` },
+First acknowledge the user's specific feelings based on their problem.
+Then explain how this Bhagavad Gita verse applies directly to them.
+Be personal, grounded, and practical.
+`
+        },
         {
           role: "user",
           content: `Problem: ${problem}\nVerse: ${verse}`
@@ -112,12 +111,15 @@ Avoid generic advice.
     })
   });
 
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error("OpenAI failed: " + text);
+  }
+
   const data = await res.json();
-  return (
-    data.choices?.[0]?.message?.content ||
-    "Krishna advises calm action without attachment to outcomes."
-  );
+  return data.choices[0].message.content;
 }
+
 
 // ---- Main API ----
 app.post("/ask", async (req, res) => {
