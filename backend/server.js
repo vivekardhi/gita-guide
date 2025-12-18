@@ -113,9 +113,13 @@ res.json({
 });
 
   } catch (e) {
-    res.status(500).json({ error: "Something went wrong" });
-  }
-});
+  console.error("ASK ERROR:", e);
+  res.status(500).json({
+    error: "Internal error",
+    details: e.message
+  });
+}
+
 
 app.listen(5000, () => {
   console.log("Backend running on port 5000");
